@@ -10,13 +10,12 @@ fi
 
 echo "Vous vous situez : $(pwd)"
 echo "Lancement de l'analyse"
-#zenity --info --text="Analyse antivirus en cours estimation 20 secondes"
-stdbuf -oL clamscan -r  "$USB_MOUNT_POINT" --remove --log=/tmp/clamav.log 2>&1 | \
+stdbuf -oL clamscan -r "$USB_MOUNT_POINT" --remove 2>&1 | tee /tmp/clamav.log | \
 while read line; do
-    echo "# $line"
-    echo "90" # Pourcentage fixe (la barre va avancer lentement)
+    echo "# $line"  # Affiche chaque ligne dans Zenity
+    echo "90"       # Pourcentage fixe (à améliorer pour un vrai suivi)
     sleep 0.1
-done | zenity --progress --title="Analyse ClamAV" --text="Analyse en cours..." --percentage=0 --auto-close --auto-kill
+done | zenity --progress --title="Analyse ClamAV" --text="Analyse en cours..." --percentage=0
 
 
 
