@@ -1,0 +1,3 @@
+ACTION=="add", SUBSYSTEM=="block", KERNEL=="sd[a-z][0-9]*", \
+  ENV{ID_VENDOR_ID}!="18a5", ENV{ID_MODEL_ID}!="0302", \
+  RUN+="/bin/systemctl restart usb-script.service"
