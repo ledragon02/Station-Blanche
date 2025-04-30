@@ -1,0 +1,22 @@
+#!/bin/sh
+
+# This script will be executed at every VM startup, you can place your own
+# custom commands here. This includes overriding some configuration in /etc,
+# starting services etc.
+#
+# Executable scripts located in /rw/config/rc.local.d with the extension
+# '.rc' are executed immediately before this rc.local.
+# Example:
+#  /rw/config/rc.local.d/custom.rc
+#
+# Example for overriding the whole CUPS configuration:
+#  rm -rf /etc/cups
+#  ln -s /rw/config/cups /etc/cups
+#  systemctl --no-block restart cups
+sudo nft add chain qubes nat { type nat hook prerouting priority dstnat \; }
+sudo nft insert rule qubes custom-input tcp dport 22 accept
+sudo nft insert rule qubes custom-forward tcp dport 22 accept # toutes les connections sont possibles
+sudo nft insert rule qubes nat ip saddr "IP de passage" tcp dport 22 dnat to " Ip de destination" # Limiter les connections au serveur ssh
+echo 'user:mot de passe' | sudo chpasswd #pour créer un mot de passe au user ssh
+sudo freshclam
+#xhost +SI:localuser:root
